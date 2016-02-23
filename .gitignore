@@ -60,4 +60,4 @@ target/
 *.swp
 
 # PyCharm
-*.idea/
+.idea/
