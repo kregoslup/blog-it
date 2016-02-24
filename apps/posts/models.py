@@ -22,7 +22,7 @@ class Commit(models.Model):
     title = models.CharField(blank=False, null=False, max_length=50)
     data = models.TextField(blank=False, null=False, max_length=3000)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(GithubUser, on_delete=models.CASCADE)
+    author = models.OneToOneField(GithubUser, on_delete=models.CASCADE)
 
     def __repr__(self):
         return '<Commit(hash=%r, title=%r, post=%r, author=%r)' % self.hash,\
