@@ -33,7 +33,7 @@ WSGI_APPLICATION = 'wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.path.join(BASE_DIR, 'mydb'),
+        'NAME': 'BlogitDB',
         'USER': 'user',
         'PASSWORD': 'password',
         'HOST': 'localhost',
