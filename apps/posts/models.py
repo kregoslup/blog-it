@@ -14,7 +14,7 @@ class Post(models.Model):
         return 'Post: %r Author: %r>' % self.title, self.author.username
 
     class Meta:
-        ordering = ('creation_date',)
+        ordering = ('created',)
 
 
 class Commit(models.Model):
