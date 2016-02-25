@@ -1,0 +1,6 @@
+AUTHORIZATION_URL = 'https://github.com/login/oauth/authorize'
+TOKEN_URL = 'https://github.com/login/oauth/access_token'
+CLIENT_ID = ''
+REDIRECT_URL = ''
+CLIENT_SECRET = ''
+SCOPE = ''
