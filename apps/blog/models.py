@@ -2,7 +2,7 @@ from django.db import models
 from urllib.parse import urljoin
 
 
-class GithubUser(models.Model):
+class User(models.Model):
     username = models.CharField(blank=False, null=False, max_length=200)
     access_token = models.CharField(blank=True, null=False, max_length=300)
     refresh_token = models.CharField(blank=False, null=False, max_length=300)
@@ -14,7 +14,7 @@ class GithubUser(models.Model):
 class Blog(models.Model):
     title = models.CharField(max_length=100, unique=True, null=False,
                              blank=False)
-    owner = models.ForeignKey(GithubUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=300, null=False, blank=False)
 
     @property
