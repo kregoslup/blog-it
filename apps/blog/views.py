@@ -4,6 +4,7 @@ from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from apps.blog.serializers import UserSerializer
 from apps.blog.models import User
+from apps.blog.tools import OAuth2Signup
 
 
 class TenPerDayUserThrottle(UserRateThrottle):
@@ -13,16 +14,14 @@ class TenPerDayUserThrottle(UserRateThrottle):
 class ApiEndpoint(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    signer = {}
+    sign_client = OAuth2Signup()
 
     @throttle_classes([TenPerDayUserThrottle])
-    def get(self, request, format=None):
+    def get(self, request):
         if request.META.code is None:
-            authorization_url, state, signer = sign_up(CLIENT_ID,
-                                                       AUTHORIZATION_URL)
-            self.signer.update({state: signer})
+            authorization_url = self.sign_client.sign_up()
             # TODO: Redirect to authorization_url
         else:
-            signer = self.signer.get(request.META.state)
-            token = fetch_token(signer, token_url=TOKEN_URL,
-                                client_secret=CLIENT_SECRET)
+            token, username = self.sign_client.fetch_token(request)
+            # TODO: Drop sign_client.signer dict entry where state is the same
+            # as in request.get.META.state after serializing and saving to database

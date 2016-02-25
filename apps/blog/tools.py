@@ -8,15 +8,25 @@ class OAuth2Signup:
     scope = SCOPE
     authorization_base_url = AUTHORIZATION_URL
     redirect_uri = REDIRECT_URL
+    token_url = TOKEN_URL
+    client_secret = CLIENT_SECRET
 
     def sign_up(self):
-        signer = OAuth2Session(self.client_id, scope=self.SCOPE)
-        authorization_url, state = signer.authorization_url(self.authorization_base_url)
-        return authorization_url, state, signer
+        signer = OAuth2Session(self.client_id, scope=self.scope)
+        authorization_url, state = signer.authorization_url(
+            self.authorization_base_url)
+        self.signer.update({state: signer})
+        return authorization_url
 
-    def fetch_token(self, signer, token_url, client_secret):
-        token = signer.fetch_token(token_url, client_secret=client_secret,
-                                   authorization_response=self.redirect_uri)
-        username = signer.get('https://api.github.com/user').json().get("login")
+    def fetch_token(self, request):
+        signer = self.signer.get(request.META.state)
+        token = signer.fetch_token(self.token_url,
+                                        client_secret=self.client_secret,
+                                        authorization_response=self.redirect_uri)
 
-        return token, username
+        return token
+
+    def get_username(self):
+        username = self.signer.get('https://api.github.com/user').json().get(
+            "login")
+        return username
