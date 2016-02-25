@@ -14,7 +14,7 @@ class TenPerDayUserThrottle(UserRateThrottle):
 class ApiEndpoint(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    sign_client = OAuth2Signup()
+    sign_client = OAuth2Signup
 
     @throttle_classes([TenPerDayUserThrottle])
     def get(self, request):
