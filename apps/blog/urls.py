@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from apps.blog.views import ApiEndpoint
+from apps.blog.views import token_query
 
 urlpatterns = [
-    url(r'^sign_up/$', ApiEndpoint.as_view())
+    url(r'^sign_up/$', token_query)
 ]
