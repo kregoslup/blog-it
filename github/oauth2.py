@@ -17,7 +17,8 @@ def get_authorization_url():
     if not (authorization_url, state):
         return Response({"message": "Invalid authorization url"},
                         status=status.HTTP_400_BAD_REQUEST)
-    return redirect(authorization_url)
+    else:
+        redirect(authorization_url)
 
 
 def get_token(request):
@@ -34,4 +35,5 @@ def get_token(request):
                         status=status.HTTP_400_BAD_REQUEST)
     else:
         request.session['oauth_token'] = token
+        redirect('profile')
 

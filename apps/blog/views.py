@@ -10,7 +10,6 @@ def profile_info(request):
 
 def oauth_callback(request):
     oauth2.get_token(request)
-    redirect('profile')
 
 
 def oauth_login(request):
