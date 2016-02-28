@@ -14,7 +14,7 @@ def get_authorization_url():
         AUTHORIZATION_URL)
     s = SessionStore()
     s['state'] = state
-    if not (authorization_url, state):
+    if not all((authorization_url, state)):
         return Response({"message": "Invalid authorization url"},
                         status=status.HTTP_400_BAD_REQUEST)
     else:
@@ -30,7 +30,7 @@ def get_token(request):
                                authorization_response=REDIRECT_URL,
                                code=code)
 
-    if not (code, state, token):
+    if not all((code, state, token)):
         return Response(data={"message": "Invalid token"},
                         status=status.HTTP_400_BAD_REQUEST)
     else:
