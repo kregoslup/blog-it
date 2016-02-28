@@ -1,6 +1,7 @@
 from django.conf.urls import url
-from apps.blog.views import token_query
+from apps.blog.views import oauth_login, oauth_callback
 
 urlpatterns = [
-    url(r'^sign_up/$', token_query)
+    url(r'^/login$', oauth_login),
+    url(r'^login/callback$/', oauth_callback),
 ]
