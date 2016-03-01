@@ -14,7 +14,7 @@ class User(models.Model):
 class Blog(models.Model):
     title = models.CharField(max_length=100, unique=True, null=False,
                              blank=False)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     name = models.CharField(max_length=300, null=False, blank=False)
 
     @property
@@ -23,6 +23,6 @@ class Blog(models.Model):
                        self.owner.username + '/' + self.name)
 
     def __repr__(self):
-        return '<Blog(title=%r, owner=%r full_name=%r)>' % (self.title,
+        return '<Blog(title=%s, owner=%s full_name=%s)>' % (self.title,
                                                             self.owner.username,
                                                             self.full_name)
