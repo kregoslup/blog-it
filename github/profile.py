@@ -4,20 +4,20 @@ from rest_framework.response import Response
 
 
 def get_all_repos(gh):
-    repositories = [name for name in gh.all_repositories['name']]
+    repositories = [repo for repo in gh.repositories("owner")]
     if not repositories:
         return Response({"message": "No repositories"},
                         status=status.HTTP_400_BAD_REQUEST)
     else:
-        return repositories
+        names = [repo.as_dict().get("name") for repo in repositories]
+        return names
 
 
-def get_username(request):
-    gh = github3.login(token=request.session['token'])
-    user = gh.me()['login']
+def get_username(token):
+    gh = github3.GitHub(token=token)
+    user = gh.me()
     if not user:
         return Response({"message": "Invalid user"},
                         status=status.HTTP_400_BAD_REQUEST)
     else:
-        request.session['username'] = user
         return user, gh
