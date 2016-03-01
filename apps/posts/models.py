@@ -3,7 +3,8 @@ from apps.blog.models import Blog, User
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=200, unique=True, null=False, blank=False)
+    title = models.CharField(max_length=200, unique=True, null=False,
+                             blank=False)
     created = models.DateField()
     updated = models.DateField()
     body = models.TextField(max_length=3000, null=False, blank=False)
@@ -22,8 +23,9 @@ class Commit(models.Model):
     title = models.CharField(blank=False, null=False, max_length=50)
     data = models.TextField(blank=False, null=False, max_length=3000)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __repr__(self):
-        return '<Commit(hash=%r, title=%r, post=%r, author=%r)' % self.hash,\
-               self.title, self.post, self.author.username
+        return '<Commit(hash=%r, title=%r, post=%r, author=%r)' % (self.hash,
+                                                                   self.title,
+                                                                   self.post,
+                                                                   self.author.username)
