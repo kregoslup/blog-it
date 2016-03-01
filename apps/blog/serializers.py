@@ -3,12 +3,14 @@ from apps.blog.models import User, Blog
 
 
 class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=200, required=True)
+    access_token = serializers.CharField(max_length=300, required=True)
+
     class Meta:
         model = User
-        fields = '__all__'
 
 
 class BlogSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Blog
-        fields = '__all__'
