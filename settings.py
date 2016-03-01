@@ -15,11 +15,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'apps.blog',
     'apps.posts',
+    'rest_framework',
+    'django.contrib.auth',
 ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
@@ -34,10 +37,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'BlogitDB',
-        'USER': 'user',
-        'PASSWORD': 'password',
+        'USER': 'docker',
+        'PASSWORD': 'docker',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 
