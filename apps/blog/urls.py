@@ -1,7 +1,11 @@
 from django.conf.urls import url
-from apps.blog.views import oauth_login, oauth_callback
+from apps.blog.views import *
+
 
 urlpatterns = [
-    url(r'^/login$', oauth_login),
-    url(r'^login/callback$/', oauth_callback),
+    url(r'^github/login/$', oauth_login),
+    url(r'^github/login/callback/$', oauth_callback),
+    url(r'^blogs/$', BlogsList.as_view()),
+    url(r'^blogs/(?P<pk>[0-9]+)/$', BlogDetail.as_view()),
+
 ]

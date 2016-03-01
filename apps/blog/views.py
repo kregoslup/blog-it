@@ -1,6 +1,18 @@
 from apps.blog.serializers import UserSerializer, BlogSerializer
-from apps.blog.models import User
+from apps.blog.models import User, Blog
 from github import oauth2, profile
+from rest_framework import generics
+from django.shortcuts import redirect
+
+
+class BlogsList(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+
+class BlogDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
 
 
 def chose_repo(request):
@@ -15,18 +27,22 @@ def chose_repo(request):
 
 
 def profile_info(request):
-    user, gh = profile.get_username(request)
-    serializer = UserSerializer(username=user,
-                                access_token=request.session['oauth2_token'])
+    token = request.session['token']
+    user, gh = profile.get_username(token['access_token'])
+    data = {"username": user.as_dict().get("login"),
+            "access_token": token['access_token']}
+    serializer = UserSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
     repos = profile.get_all_repos(gh)
-    return {user: repos}
+    return redirect({(serializer.username, serializer.id): repos})
 
 
 def oauth_callback(request):
-    oauth2.get_token(request)
+    token = oauth2.get_token(request)
+    request.session['token'] = token
+    return redirect('/profile/')
 
 
 def oauth_login(request):
-    oauth2.get_authorization_url()
+    return redirect(oauth2.get_authorization_url())
