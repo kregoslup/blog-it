@@ -1,5 +1,6 @@
 from django.db import models
 from apps.blog.models import Blog, User
+from urllib.parse import urljoin
 
 
 class Post(models.Model):
@@ -14,12 +15,18 @@ class Post(models.Model):
     def __repr__(self):
         return 'Post: %r Author: %r>' % self.title, self.author.username
 
+    @property
+    def raw_content(self, file_name):
+        return urljoin('http://raw.githubusercontent.com/repos',
+                       '/'.join((self.blog.owner.username, self.blog.name,
+                                 'master', file_name)))
+
     class Meta:
         ordering = ('created',)
 
 
 class Commit(models.Model):
-    hash = models.CharField(blank=False, null=False, max_length=40)
+    hash = models.CharField(blank=False, null=False, max_length=100)
     title = models.CharField(blank=False, null=False, max_length=50)
     data = models.TextField(blank=False, null=False, max_length=3000)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
