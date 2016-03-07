@@ -19,8 +19,7 @@ class Blog(models.Model):
 
     @property
     def full_name(self):
-        return urljoin('http://github.com',
-                       self.owner.username + '/' + self.name)
+        return urljoin('http://github.com',  '/'.join((self.owner.username, self.name)))
 
     def __repr__(self):
         return '<Blog(title=%s, owner=%s full_name=%s)>' % (self.title,
