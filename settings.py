@@ -8,6 +8,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+BROKER_URL = "amqp://guest:guest@localhost:5672"
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
@@ -17,6 +20,7 @@ INSTALLED_APPS = [
     'apps.posts',
     'rest_framework',
     'django.contrib.auth',
+    'djcelery',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -29,9 +33,7 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'urls'
 
-
 WSGI_APPLICATION = 'wsgi.application'
-
 
 DATABASES = {
     'default': {
@@ -43,7 +45,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -60,7 +61,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -70,3 +70,5 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+SITE_ID = 1
