@@ -3,7 +3,8 @@ from rest_framework import status
 from rest_framework.response import Response
 
 
-def get_all_repos(gh):
+def get_all_repos(token):
+    gh = github3.GitHub(token=token)
     repositories = [repo for repo in gh.repositories("owner")]
     if not repositories:
         return Response({"message": "No repositories"},
@@ -20,4 +21,4 @@ def get_username(token):
         return Response({"message": "Invalid user"},
                         status=status.HTTP_400_BAD_REQUEST)
     else:
-        return user, gh
+        return user
