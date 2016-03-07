@@ -15,7 +15,7 @@ class PostViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def webhook(request):
     request_data = request.body
-    if ["zen"] in request_data:
+    if "zen" in request_data.keys():
         return Response(status=status.HTTP_200_OK)
     else:
         parse_webhook.delay(request_data, serializer='json')
