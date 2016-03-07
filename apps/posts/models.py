@@ -28,6 +28,7 @@ class Post(models.Model):
         ordering = ('created',)
 
 
+# TODO: Remove Commit.data or store raw text and parsed text in Post.body
 class Commit(models.Model):
     hash = models.CharField(blank=False, null=False, max_length=100)
     title = models.CharField(blank=False, null=False, max_length=50)
