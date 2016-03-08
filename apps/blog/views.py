@@ -1,5 +1,5 @@
 from apps.blog.serializers import UserSerializer, BlogSerializer
-from apps.blog.models import Blog
+from apps.blog.models import Blog, User
 from github import oauth2, profile
 from rest_framework import status, viewsets
 from rest_framework.response import Response
@@ -12,13 +12,15 @@ class BlogsList(viewsets.ModelViewSet):
 
 
 def profile_info(request):
-    data = {"token": request.session['token'],
-            "username": request.session['username']}
+    data = {"username": request.session['username'],
+            "token": request.session['token']}
     serializer = UserSerializer(data=data)
     if serializer.is_valid():
-        serializer.save()
-        names = profile.get_all_repos(data['token'])
-        return Response(data={serializer.data: names},
+        obj, created = User.objects.update_or_create(username=data['username'],
+                                                     defaults=serializer.validated_data)
+        obj.save()
+        repo_names = profile.get_all_repos(data['token'])
+        return Response(data={serializer.data: repo_names},
                         status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
