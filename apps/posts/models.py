@@ -1,16 +1,15 @@
 from django.db import models
 from apps.blog.models import Blog, User
 from urllib.parse import urljoin
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from apps.posts import tasks
+import django.utils.timezone as dut
+import datetime
 
 
 class Post(models.Model):
     title = models.CharField(max_length=200, unique=True, null=False,
                              blank=False)
-    created = models.DateField(auto_created=True)
-    updated = models.DateField(auto_now_add=True)
+    created = models.DateTimeField(editable=False, auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
     body = models.TextField(max_length=3000, null=False, blank=False)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -27,8 +26,13 @@ class Post(models.Model):
     class Meta:
         ordering = ('created',)
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = datetime.datetime.now()
+        self.updated = datetime.datetime.now()
+        return super(Post, self).save(*args, **kwargs)
 
-# TODO: Remove Commit.data or store raw text and parsed text in Post.body
+
 class Commit(models.Model):
     hash = models.CharField(blank=False, null=False, max_length=100)
     title = models.CharField(blank=False, null=False, max_length=50)
