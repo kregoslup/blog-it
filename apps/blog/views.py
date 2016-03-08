@@ -1,17 +1,12 @@
 from apps.blog.serializers import UserSerializer, BlogSerializer
-from apps.blog.models import Blog, User
-from github import oauth2, profile, repos
-from rest_framework import generics, status, viewsets
+from apps.blog.models import Blog
+from github import oauth2, profile
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from django.shortcuts import redirect
 
 
 class BlogsList(viewsets.ModelViewSet):
-    queryset = Blog.objects.all()
-    serializer_class = BlogSerializer
-
-
-class BlogDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
 
