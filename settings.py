@@ -11,6 +11,8 @@ ALLOWED_HOSTS = []
 CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 BROKER_URL = "amqp://guest:guest@localhost:5672"
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
+
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
