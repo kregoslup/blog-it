@@ -1,2 +1,6 @@
+requests
+celery
+github3
 Python==3.4.3
 Django==1.9.2
+rest_framework_nested
