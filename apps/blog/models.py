@@ -3,7 +3,8 @@ from urllib.parse import urljoin
 
 
 class User(models.Model):
-    username = models.CharField(blank=False, null=False, max_length=200)
+    username = models.CharField(blank=False, null=False, max_length=200,
+                                unique=True)
     access_token = models.CharField(blank=True, null=False, max_length=300)
 
     def __repr__(self):
