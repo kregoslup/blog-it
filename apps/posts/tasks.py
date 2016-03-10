@@ -17,7 +17,7 @@ def sync_posts(username, repo_name, commits_data):
     for commit in commits_data:
         for files in commit['files']:
             if '.' in files['filename']:
-                filename = files['filename'].split('.')[-1],
+                filename = files['filename'].split('.')[-1]
             else:
                 filename = files['filename']
             if files['status'] is 'modified' and files['filename'] not in added:
