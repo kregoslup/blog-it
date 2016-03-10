@@ -21,9 +21,8 @@ def profile_info(request):
             "token": request.session['token']}
     serializer = UserSerializer(data=data)
     if serializer.is_valid():
-        obj, created = User.objects.update_or_create(username=data['username'],
-                                                     defaults=serializer.validated_data)
-        obj.save()
+        User.objects.update_or_create(username=data['username'],
+                                      defaults=serializer.validated_data)
         repo_names = profile.get_all_repos(data['token'])
         return Response(data={serializer.data: repo_names},
                         status=status.HTTP_200_OK)
