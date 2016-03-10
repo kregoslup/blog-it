@@ -19,7 +19,7 @@ def parse_existing_repository(data):
         else:
             post_title = file[1]
         bulk_posts.append(Post(title=post_title, body=body, blog=b, author=u))
-        Post.objects.bulk_create(bulk_posts, batch_size=len(bulk_posts))
+    Post.objects.bulk_create(bulk_posts, batch_size=len(bulk_posts))
 
 
 @task
