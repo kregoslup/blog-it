@@ -4,7 +4,7 @@ import github3
 from celery.task import task
 import json
 from github.repos import download_file
-from apps.posts.tasks import sync_posts
+from celery import chain
 
 
 @task
@@ -19,11 +19,7 @@ def parse_existing_repository(data):
         else:
             post_title = file[1]
         bulk_posts.append(Post(title=post_title, body=body, blog=b, author=u))
-    if len(bulk_posts) > 1:
         Post.objects.bulk_create(bulk_posts, batch_size=len(bulk_posts))
-    else:
-        p = bulk_posts[0]
-        p.save()
 
 
 @task
@@ -37,4 +33,7 @@ def check_existing_repository(request_data):
                      for url in json.loads(repository._get(contents_url).text)]
     if download_urls:
         data = {"d_urls": download_urls, "token": token, "repo_name": repo_name}
-        sync_posts.delay(data)
+        return data
+
+
+res = chain(check_existing_repository(), parse_existing_repository())
