@@ -23,11 +23,9 @@ def parse_existing_repository(data):
 
 
 @task
-def check_existing_repository(request_data):
-    token = request_data['access_token']
-    repo_name = request_data['repo_name']
+def check_existing_repository(username, token, repo_name):
     gh = github3.GitHub(token=token)
-    repository = gh.repository(request_data['username'], repo_name)
+    repository = gh.repository(username, repo_name)
     contents_url = repository.as_dict().get("contents_url").replace('{+path}', '')
     download_urls = [(url.get("download_url"), url.get("name"))
                      for url in json.loads(repository._get(contents_url).text)]

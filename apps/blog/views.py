@@ -4,6 +4,7 @@ from github import oauth2, profile, repos
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from django.shortcuts import redirect
+from apps.blog.tasks import res
 
 
 class BlogsList(viewsets.ModelViewSet):
@@ -14,6 +15,7 @@ class BlogsList(viewsets.ModelViewSet):
         serializer.save()
         u = User.objects.get(pk=serializer.data['owner'])
         repos.create_webhook(u.access_token, serializer.data['name'])
+        res.apply_async(u.username, u.access_token, serializer.data['name'])
 
 
 def profile_info(request):
