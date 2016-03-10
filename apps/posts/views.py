@@ -4,7 +4,7 @@ from rest_framework import status
 from apps.posts.models import Post
 from apps.posts.serializers import PostSerializer
 from rest_framework.decorators import api_view
-from apps.posts.tasks import parse_webhook
+from apps.posts.tasks import res
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -15,8 +15,11 @@ class PostViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def webhook(request):
     request_data = request.body
-    if "zen" in request_data.keys():
+    if "zen" in request_data.keys() or not request_data['ref'].endswith('master'):
         return Response(status=status.HTTP_200_OK)
     else:
-        parse_webhook.delay(request_data, serializer='json')
+        commits = [commit for commit in request_data['commits']]
+        repo_name = request_data["repository"]['name']
+        username = request_data['repository']['owner']['name']
+        res.apply_acync(username, repo_name, commits)
         return Response(status=status.HTTP_200_OK)
