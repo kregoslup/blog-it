@@ -1,14 +1,10 @@
-from requests_oauthlib import OAuth2Session
 from rest_framework.test import APITestCase
 from github.oauth2 import *
 from rest_framework import status
-from django.test.client import Client
-from django.test import mock
-from django.core.urlresolvers import reverse
 from importlib import import_module
 from django.conf import settings
 from apps.blog.models import User, Blog
-from apps.blog.serializers import UserSerializer, BlogSerializer
+from apps.blog.serializers import UserSerializer
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -18,21 +14,21 @@ class BlogSerializerTest(APITestCase):
         response = self.client.get('/blogs/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_create_blog_post(self):
-        u = User(username='test', access_token='testtoken')
+    def test_create_blog(self):
+        u = User(username='kregoslup', access_token="")
         u.save()
         response = self.client.post('/blogs/', data={"title": "test", "owner": u.pk,
-                                                     "name": "test"})
+                                                     "name": "testrepo"})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_get_created_blog(self):
-        u = User(username='test', access_token='testtoken')
+        u = User(username='kregoslup', access_token='')
         u.save()
         response = self.client.post('/blogs/', data={"title": "test", "owner": u.pk,
-                                    "name": "test"})
+                                    "name": "testrepo"})
         b = Blog.objects.get(title='test')
         response = self.client.get('/blogs/' + str(b.pk), follow=True)
-        self.assertEqual(response.data, {'name': 'test', 'id': 2, 'title': 'test',
+        self.assertEqual(response.data, {'name': 'testrepo', 'id': 2, 'title': 'test',
                                          'owner': 2})
 
 
