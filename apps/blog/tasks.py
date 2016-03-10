@@ -36,4 +36,4 @@ def check_existing_repository(request_data):
         return data
 
 
-res = chain(check_existing_repository(), parse_existing_repository())
+res = chain(check_existing_repository, parse_existing_repository)

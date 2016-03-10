@@ -18,16 +18,16 @@ class BlogsList(viewsets.ModelViewSet):
 
 def profile_info(request):
     data = {"username": request.session['username'],
-            "token": request.session['token']}
+            "access_token": request.session['token']}
     serializer = UserSerializer(data=data)
     if serializer.is_valid():
         User.objects.update_or_create(username=data['username'],
                                       defaults=serializer.validated_data)
-        repo_names = profile.get_all_repos(data['token'])
-        return Response(data={serializer.data: repo_names},
+        repo_names = profile.get_all_repos(data['access_token'])
+        return Response(data=[serializer.data, repo_names],
                         status=status.HTTP_200_OK)
     else:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 def oauth_callback(request):

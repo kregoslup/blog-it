@@ -63,4 +63,4 @@ def parse_webhook(username, repo_name, commits):
     return username, repo_name, commits_data
 
 
-res = chain(parse_webhook(), sync_commits(), sync_posts())
+res = chain(parse_webhook, sync_commits, sync_posts)
