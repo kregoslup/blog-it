@@ -5,6 +5,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 from django.shortcuts import redirect
 from apps.blog.tasks import res
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class BlogsList(viewsets.ModelViewSet):
@@ -12,10 +13,14 @@ class BlogsList(viewsets.ModelViewSet):
     serializer_class = BlogSerializer
 
     def perform_create(self, serializer):
-        serializer.save()
-        u = User.objects.get(pk=serializer.data['owner'])
-        repos.create_webhook(u.access_token, serializer.data['name'])
-        res.apply_async(u.username, u.access_token, serializer.data['name'])
+        try:
+            serializer.save()
+            user = User.objects.get(pk=serializer.data['owner'])
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            repos.create_webhook(user.access_token, serializer.data['name'])
+            res.apply_async(user.username, user.access_token, serializer.data['name'])
 
 
 def profile_info(request):

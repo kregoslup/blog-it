@@ -20,16 +20,17 @@ def parse_existing_repository(data):
         logger.info('{} : {} does not exist'.format(data['token'],
                                                     data['repo_name']))
         raise parse_existing_repository.retry(exc=exc)
-    bulk_posts = []
-    for file in data['d_urls']:
-        body = download_file(file[0], data['token'])
-        if '.' in file[1]:
-            post_title = file[1].split('.')[-1]
-        else:
-            post_title = file[1]
-        bulk_posts.append(Post(title=post_title, body=body, blog=blog,
-                               author=user))
-    Post.objects.bulk_create(bulk_posts, batch_size=len(bulk_posts))
+    else:
+        bulk_posts = []
+        for file in data['d_urls']:
+            body = download_file(file[0], data['token'])
+            if '.' in file[1]:
+                post_title = file[1].split('.')[-1]
+            else:
+                post_title = file[1]
+            bulk_posts.append(Post(title=post_title, body=body, blog=blog,
+                                   author=user))
+        Post.objects.bulk_create(bulk_posts, batch_size=len(bulk_posts))
 
 
 @task
