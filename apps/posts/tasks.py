@@ -4,14 +4,20 @@ from celery.task import task
 import github3
 from github.repos import download_file
 from celery import chain
+from django.core.exceptions import ObjectDoesNotExist
+from celery.utils.log import get_task_logger
 
-# TODO: Sanity checks
+logger = get_task_logger(__name__)
 
 
 @task
 def sync_posts(username, repo_name, commits_data):
-    u = User.objects.get(username=username)
-    b = Blog.objects.get(name=repo_name, owner=u)
+    try:
+        user = User.objects.get(username=username)
+        blog = Blog.objects.get(name=repo_name, owner=user)
+    except ObjectDoesNotExist as exc:
+        logger.info('{} : {} does not exist'.format(username, repo_name))
+        raise sync_commits.retry(exc=exc)
     added = set()
     removed = set()
     for commit in commits_data:
@@ -22,35 +28,38 @@ def sync_posts(username, repo_name, commits_data):
                 filename = files['filename']
             if files['status'] is 'modified' and files['filename'] not in added:
                 added.add(files['filename'])
-                post_body = download_file(files['contents_url'], u.access_token)
-                Post.objects.filter(title=filename, blog=b).update(body=post_body)
+                post_body = download_file(files['contents_url'], user.access_token)
+                Post.objects.filter(title=filename, blog=blog).update(body=post_body)
             elif files['status'] is 'added' and files['filename'] not in added:
                 added.add(files['filename'])
                 obj, created = User.objects.get_or_create(username=commit['commit_author'],
                                                           defaults={"username": commit['commit_author']})
-                post_body = download_file(files['contents_url'], u.access_token)
+                post_body = download_file(files['contents_url'], user.access_token)
                 Post.objects.create(title=filename, body=post_body,
-                                    blog=b, author=obj)
+                                    blog=blog, author=obj)
             elif files['status'] is 'removed' and files['filename'] not in added:
                 removed.add(filename)
-                Post.objects.filter(title=filename, blog=b).delete()
+                Post.objects.filter(title=filename, blog=blog).delete()
 
 
-@task
+@task(default_retry_delay=5 * 60, max_retries=12)
 def sync_commits(username, repo_name, commits_data):
-    u = User.objects.get(username=username)
-    b = Blog.objects.get(name=repo_name, owner=u)
-    gh = github3.GitHub(token=u.access_token)
-    gh_repo = gh.repository(u.username, b.name)
+    try:
+        user = User.objects.get(username=username)
+        blog = Blog.objects.get(name=repo_name, owner=user)
+    except ObjectDoesNotExist as exc:
+        logger.info('{} : {} does not exist'.format(username, repo_name))
+        raise sync_commits.retry(exc=exc)
+    gh = github3.GitHub(token=user.access_token)
+    gh_repo = gh.repository(user.username, blog.name)
     commit_bulk_create_data = [
         Commit(hash=commit['hash'], title=commit['title'],
-               blog=b) for commit in commits_data]
+               blog=blog) for commit in commits_data]
     Commit.objects.bulk_create(commit_bulk_create_data,
                                batch_size=len(commit_bulk_create_data))
     for commit in commits_data:
         commit.update(
             {"files": gh_repo.commit(commit['hash']).as_dict()['files']})
-
     return username, repo_name, commits_data.sort(key=lambda x: x['timestamp'])
 
 

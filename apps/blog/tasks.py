@@ -5,12 +5,21 @@ from celery.task import task
 import json
 from github.repos import download_file
 from celery import chain
+from django.core.exceptions import ObjectDoesNotExist
+from celery.utils.log import get_task_logger
+
+logger = get_task_logger(__name__)
 
 
 @task
 def parse_existing_repository(data):
-    u = User.objects.get(acccess_token=data['token'])
-    b = Blog.objects.get(name=data['repo_name'])
+    try:
+        user = User.objects.get(acccess_token=data['token'])
+        blog = Blog.objects.get(name=data['repo_name'])
+    except ObjectDoesNotExist as exc:
+        logger.info('{} : {} does not exist'.format(data['token'],
+                                                    data['repo_name']))
+        raise parse_existing_repository.retry(exc=exc)
     bulk_posts = []
     for file in data['d_urls']:
         body = download_file(file[0], data['token'])
@@ -18,7 +27,8 @@ def parse_existing_repository(data):
             post_title = file[1].split('.')[-1]
         else:
             post_title = file[1]
-        bulk_posts.append(Post(title=post_title, body=body, blog=b, author=u))
+        bulk_posts.append(Post(title=post_title, body=body, blog=blog,
+                               author=user))
     Post.objects.bulk_create(bulk_posts, batch_size=len(bulk_posts))
 
 
