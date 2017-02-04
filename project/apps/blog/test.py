@@ -1,6 +1,6 @@
 from importlib import import_module
 
-from apps.blog.models import User, Blog
+from project.apps.blog.models import User, Blog
 from django.conf import settings
 from rest_framework import status
 from rest_framework.test import APITestCase

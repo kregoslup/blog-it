@@ -1,5 +1,5 @@
-from apps.blog.credentials import thook
-from apps.posts.tasks import sync_posts
+from project.apps.blog.credentials import thook
+from project.apps.posts.tasks import sync_posts
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase

@@ -1,5 +1,5 @@
-from apps.posts.serializers import PostSerializer
-from apps.posts.tasks import res
+from project.apps.posts.serializers import PostSerializer
+from project.apps.posts.tasks import res
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import api_view

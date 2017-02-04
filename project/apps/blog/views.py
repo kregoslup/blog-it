@@ -1,5 +1,5 @@
-from apps.blog.models import Blog, User
-from apps.blog.tasks import res
+from project.apps.blog.models import Blog, User
+from project.apps.blog.tasks import res
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from github import profile, repos

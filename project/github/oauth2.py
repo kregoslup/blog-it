@@ -1,5 +1,5 @@
 from requests_oauthlib import OAuth2Session
-from apps.blog.credentials import *
+from project.apps.blog.credentials import *
 from rest_framework import status
 from rest_framework.response import Response
 from django.shortcuts import redirect

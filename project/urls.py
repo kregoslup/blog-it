@@ -1,4 +1,4 @@
-from apps.blog.views import BlogsList, profile_info, oauth_login, oauth_callback
+from project.apps.blog.views import BlogsList, profile_info, oauth_login, oauth_callback
 from django.conf.urls import url, include
 from rest_framework_nested import routers
 

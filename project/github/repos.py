@@ -2,7 +2,7 @@ import github3
 from urllib.parse import urljoin
 import requests
 import json
-from apps.blog import credentials
+from project.apps.blog import credentials
 
 
 def create_webhook(token, repo_name):

@@ -1,7 +1,7 @@
 import json
 
 import github3
-from apps.blog.models import Blog, User
+from project.apps.blog.models import Blog, User
 from celery import chain
 from celery.task import task
 from celery.utils.log import get_task_logger
