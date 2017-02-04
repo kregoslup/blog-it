@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from apps.blog.models import User, Blog
+
+from project.apps.blog.models import User, Blog
 
 
 class UserSerializer(serializers.ModelSerializer):

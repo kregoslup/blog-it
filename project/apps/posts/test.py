@@ -1,9 +1,10 @@
-from rest_framework.test import APITestCase
-from rest_framework import status
-from apps.blog.tasks import *
-from django.test import TestCase
 from apps.blog.credentials import thook
 from apps.posts.tasks import sync_posts
+from django.test import TestCase
+from rest_framework import status
+from rest_framework.test import APITestCase
+
+from project.apps.blog.tasks import *
 
 
 class PostAPITest(APITestCase):

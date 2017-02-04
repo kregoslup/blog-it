@@ -1,11 +1,12 @@
-from apps.blog.models import Blog, User
-from apps.posts.models import Commit, Post
-from celery.task import task
 import github3
-from github.repos import download_file
+from apps.blog.models import Blog, User
 from celery import chain
-from django.core.exceptions import ObjectDoesNotExist
+from celery.task import task
 from celery.utils.log import get_task_logger
+from django.core.exceptions import ObjectDoesNotExist
+
+from project.apps.posts.models import Commit, Post
+from project.github.repos import download_file
 
 logger = get_task_logger(__name__)
 

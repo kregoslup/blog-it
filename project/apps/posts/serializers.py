@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from apps.posts.models import Post, Commit
+
+from project.apps.posts.models import Post, Commit
 
 
 class PostSerializer(serializers.ModelSerializer):

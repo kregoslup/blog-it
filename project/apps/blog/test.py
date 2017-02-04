@@ -1,10 +1,11 @@
-from rest_framework.test import APITestCase
-from github.oauth2 import *
-from rest_framework import status
 from importlib import import_module
-from django.conf import settings
+
 from apps.blog.models import User, Blog
-from apps.blog.serializers import UserSerializer
+from django.conf import settings
+from rest_framework import status
+from rest_framework.test import APITestCase
+
+from project.apps.blog.serializers import UserSerializer
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 

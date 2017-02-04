@@ -1,11 +1,13 @@
-from apps.blog.serializers import UserSerializer, BlogSerializer
 from apps.blog.models import Blog, User
-from github import oauth2, profile, repos
-from rest_framework import status, viewsets
-from rest_framework.response import Response
-from django.shortcuts import redirect
 from apps.blog.tasks import res
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import redirect
+from github import profile, repos
+from rest_framework import status, viewsets
+from rest_framework.response import Response
+
+from project.apps.blog.serializers import UserSerializer, BlogSerializer
+from project.github import oauth2
 
 
 class BlogsList(viewsets.ModelViewSet):

@@ -1,10 +1,11 @@
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework import status
-from apps.posts.models import Post
 from apps.posts.serializers import PostSerializer
-from rest_framework.decorators import api_view
 from apps.posts.tasks import res
+from rest_framework import status
+from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from project.apps.posts.models import Post
 
 
 class PostViewSet(viewsets.ModelViewSet):

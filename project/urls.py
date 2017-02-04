@@ -1,8 +1,8 @@
+from apps.blog.views import BlogsList, profile_info, oauth_login, oauth_callback
 from django.conf.urls import url, include
 from rest_framework_nested import routers
-from apps.blog.views import BlogsList, profile_info, oauth_login, oauth_callback
-from apps.posts.views import PostViewSet, webhook
 
+from project.apps.posts.views import PostViewSet, webhook
 
 router = routers.SimpleRouter()
 router.register(r'blogs', BlogsList)

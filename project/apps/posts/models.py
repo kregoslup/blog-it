@@ -1,8 +1,9 @@
-from django.db import models
-from apps.blog.models import Blog, User
-from urllib.parse import urljoin
-import django.utils.timezone as dut
 import datetime
+from urllib.parse import urljoin
+
+from django.db import models
+
+from project.apps.blog.models import Blog, User
 
 
 class Post(models.Model):
