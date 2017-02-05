@@ -25,7 +25,7 @@ class BlogSerializerTest(APITestCase):
     def test_get_created_blog(self):
         u = User(username='kregoslup', access_token='')
         u.save()
-        response = self.client.post('/blogs/', data={"title": "test", "owner": u.pk,
+        self.client.post('/blogs/', data={"title": "test", "owner": u.pk,
                                     "name": "testrepo"})
         b = Blog.objects.get(title='test')
         response = self.client.get('/blogs/' + str(b.pk), follow=True)

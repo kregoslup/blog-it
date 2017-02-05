@@ -9,9 +9,7 @@ def get_all_repos(token):
     if not repositories:
         return Response({"message": "No repositories"},
                         status=status.HTTP_400_BAD_REQUEST)
-    else:
-        names = [repo.as_dict().get("name") for repo in repositories]
-        return names
+    return [repo.as_dict().get("name") for repo in repositories]
 
 
 def get_username(token):
@@ -20,5 +18,4 @@ def get_username(token):
     if not user:
         return Response({"message": "Invalid user"},
                         status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return user
+    return user
