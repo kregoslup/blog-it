@@ -22,9 +22,23 @@ INSTALLED_APPS = [
     'project.apps.blog',
     'project.apps.posts',
     'rest_framework',
+    'rest_framework.authtoken',
     'django.contrib.auth',
     'djcelery',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+DJOSER = {
+    'DOMAIN': 'frontend.com',
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_CONFIRMATION_EMAIL': True,
+}
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
