@@ -13,6 +13,7 @@ BROKER_URL = "amqp://guest:guest@localhost:5672"
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 
+AUTH_USER_MODEL = 'project.apps.blog.User'
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',

@@ -1,8 +1,9 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from urllib.parse import urljoin
 
 
-class User(models.Model):
+class User(AbstractUser):
     username = models.CharField(blank=False, null=False, max_length=200,
                                 unique=True)
     access_token = models.CharField(blank=True, null=False, max_length=300)

@@ -2,7 +2,7 @@ from project.apps.blog.models import Blog, User
 from project.apps.blog.tasks import res
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
-from github import profile, repos
+from project.github import profile, repos
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
@@ -10,7 +10,7 @@ from project.apps.blog.serializers import UserSerializer, BlogSerializer
 from project.github import oauth2
 
 
-class BlogsList(viewsets.ModelViewSet):
+class BlogsViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
 
