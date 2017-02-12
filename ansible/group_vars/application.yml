@@ -1,0 +1,6 @@
+project_name: "blog_it"
+user: "{{ django }}"
+application_dir: "/blog-it"
+backend_path: "{{ application_dir }}/project"
+temp_dir: "/tmp"
+virtualenv_dir: "/home/{{ user }}/.virtualenvs/{{ project_name }}
