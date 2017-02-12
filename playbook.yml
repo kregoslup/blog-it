@@ -1,0 +1,7 @@
+- name: Create a {{ application_name }}"
+  hosts: all
+  vars_files:
+    - ansible/group_vars/application.yml
+
+roles:
+  - backend
