@@ -1,4 +1,5 @@
-- name: "Install python dependancies"
-  user: {{ user }}
-  with_items:
-    - ""
+- name: Install requirements
+  pip:
+    requirements: /my_app/requirements.txt
+    virtualenv: "{{ virtualenv_dir }}"
+    virtualenv_python: "{{ python_version }}"

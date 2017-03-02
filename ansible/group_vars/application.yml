@@ -8,11 +8,13 @@ user: "{{ django }}"
 application_dir: "/blog-it"
 backend_path: "{{ application_dir }}/project"
 temp_dir: "/tmp"
-virtualenv_dir: "/home/{{ user }}/.virtualenvs/{{ project_name }}
+virtualenv_dir: "/home/{{ user }}/.virtualenvs/{{ project_name }}"
+python_requirements: "{{ application_dir }}/requirements.txt"
+python_version: "python3.4"
 
-# -------- #
-# POSTGRES #
-# -------- #
+# ---------- #
+# POSTGRESQL #
+# ---------- #
 
 postgresql_version: 9.3
 postgresql_encoding: 'UTF-8'
