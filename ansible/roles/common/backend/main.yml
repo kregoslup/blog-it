@@ -8,3 +8,9 @@
     command: collectstatic
     app_path: "{{ application_dir }}"
     virtualenv: "{{ virtualenv_dir }}"
+
+- django_manage:
+    command: loaddata
+    app_path: "{{ application_dir }}"
+    virtualenv: "{{ virtualenv_dir }}"
+    fixtures: "{{ initial_data }}"

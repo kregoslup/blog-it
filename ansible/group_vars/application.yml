@@ -1,6 +1,25 @@
+# ------- #
+# PROJECT #
+# ------- #
+
+
 project_name: "blog_it"
 user: "{{ django }}"
 application_dir: "/blog-it"
 backend_path: "{{ application_dir }}/project"
 temp_dir: "/tmp"
 virtualenv_dir: "/home/{{ user }}/.virtualenvs/{{ project_name }}
+
+# -------- #
+# POSTGRES #
+# -------- #
+
+postgresql_version: 9.3
+postgresql_encoding: 'UTF-8'
+postgresql_locale: 'en_US.UTF-8'
+postgresql_ctype: 'en_US.UTF-8'
+postgresql_admin_user: "postgres"
+
+postgresql_databases:
+  - name: "{{ project_name }}"
+    owner: "{{ user }}"
