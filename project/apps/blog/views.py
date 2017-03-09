@@ -1,3 +1,5 @@
+from rest_framework.generics import RetrieveAPIView
+
 from project.apps.blog.models import Blog, User
 from project.apps.blog.tasks import res
 from django.core.exceptions import ObjectDoesNotExist
@@ -25,25 +27,29 @@ class BlogsViewSet(viewsets.ModelViewSet):
             res.apply_async(user.username, user.access_token, serializer.data['name'])
 
 
-def profile_info(request):
-    data = {"username": request.session['username'],
-            "access_token": request.session['token']}
-    serializer = UserSerializer(data=data)
-    if serializer.is_valid():
-        User.objects.update_or_create(username=data['username'],
-                                      defaults=serializer.validated_data)
-        repo_names = profile.get_all_repos(data['access_token'])
-        return Response(data=[serializer.data, repo_names],
-                        status=status.HTTP_200_OK)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+class ProfileInfoView(RetrieveAPIView):
+    serializer_class = UserSerializer
+    
+    def retrieve(self, request, *args, **kwargs):
+        data = {"username": request.session['username'],
+                "access_token": request.session['token']}
+        serializer = UserSerializer(data=data)
+        if serializer.is_valid():
+            User.objects.update_or_create(username=data['username'],
+                                          defaults=serializer.validated_data)
+            repo_names = profile.get_all_repos(data['access_token'])
+            return Response(data=[serializer.data, repo_names],
+                            status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 def oauth_callback(request):
     token = oauth2.get_token(request)
     request.session['token'] = token['access_token']
-    request.session['username'] = \
-        profile.get_username(token['access_token']).as_dict()['login']
+    request.session['username'] = profile.get_username(
+        token['access_token']
+    ).as_dict()['login']
     return redirect('/profile/')
 
 
