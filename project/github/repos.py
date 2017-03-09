@@ -9,7 +9,10 @@ def create_webhook(token, repo_name):
     gh = github3.GitHub(token=token)
     webhook_url = urljoin(credentials.DOMAIN, 'webhook')
     repository = gh.repository(gh.me(), repo_name)
-    config = {"url": webhook_url, "content_type": "json"}
+    config = {
+        "url": webhook_url,
+        "content_type": "json"
+    }
     repository.create_hook(name='web', config=config, events=list('push'))
 
 

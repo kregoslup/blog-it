@@ -11,8 +11,7 @@ class PostAPITest(APITestCase):
     def test_get_posts(self):
         u = User(username='kregoslup', access_token='')
         u.save()
-        self.client.post('/blogs/',
-                                    data={"title": "test", "owner": u.pk,
+        self.client.post('/blogs/', data={"title": "test", "owner": u.pk,
                                           "name": "testrepo"})
         b = Blog.objects.get(title='test')
         response = self.client.get('/blogs/' + str(b.pk) + '/' + 'posts' + '/')
@@ -21,8 +20,7 @@ class PostAPITest(APITestCase):
     def test_create_post(self):
         u = User(username='kregoslup', access_token='')
         u.save()
-        self.client.post('/blogs/',
-                                    data={"title": "test", "owner": u.pk,
+        self.client.post('/blogs/', data={"title": "test", "owner": u.pk,
                                           "name": "testrepo"})
         b = Blog.objects.get(title='test')
         response = self.client.post('/blogs/' + str(b.pk) + '/' + 'posts' + '/',

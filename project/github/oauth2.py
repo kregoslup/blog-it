@@ -26,7 +26,7 @@ def get_token(request):
                                authorization_response=REDIRECT_URL,
                                code=code)
 
-    if not all((code, state, token)):
+    if not token:
         return Response(data={"message": "Invalid token"},
                         status=status.HTTP_400_BAD_REQUEST)
     return token
