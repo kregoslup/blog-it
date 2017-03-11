@@ -1,3 +1,6 @@
+import github3
+from django.http.response import Http404
+from django.views.generic.base import RedirectView
 from rest_framework.generics import RetrieveAPIView
 
 from project.apps.blog.models import Blog, User
@@ -29,28 +32,35 @@ class BlogsViewSet(viewsets.ModelViewSet):
 
 class ProfileInfoView(RetrieveAPIView):
     serializer_class = UserSerializer
-    
+
     def retrieve(self, request, *args, **kwargs):
-        data = {"username": request.session['username'],
-                "access_token": request.session['token']}
+        data = {
+            "username": request.session['username'],
+            "access_token": request.session['token']
+        }
         serializer = UserSerializer(data=data)
-        if serializer.is_valid():
-            User.objects.update_or_create(username=data['username'],
-                                          defaults=serializer.validated_data)
-            repo_names = profile.get_all_repos(data['access_token'])
-            return Response(data=[serializer.data, repo_names],
-                            status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        User.objects.update_or_create(
+            username=data['username'],
+            defaults=serializer.validated_data
+        )
+        repositories = profile.get_all_repositories(data['access_token'])
+        return Response(data=[serializer.data, repositories],
+                        status=status.HTTP_200_OK)
 
 
-def oauth_callback(request):
-    token = oauth2.get_token(request)
-    request.session['token'] = token['access_token']
-    request.session['username'] = profile.get_username(
-        token['access_token']
-    ).as_dict()['login']
-    return redirect('/profile/')
+class OauthCallback(RedirectView):
+    url = '/profile'
+
+    def get(self, request, *args, **kwargs):
+        token = oauth2.get_token(request)
+        request.session['token'] = token['access_token']
+        gh = github3.GitHub(token=token)
+        user = gh.user()
+        if not user:
+            raise Http404()
+        request.session['username'] = user.as_dict()['login']
+        return super(OauthCallback, self).get(request, *args, **kwargs)
 
 
 def oauth_login(request):
