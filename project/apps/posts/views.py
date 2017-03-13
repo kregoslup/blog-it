@@ -17,10 +17,9 @@ class PostViewSet(viewsets.ModelViewSet):
 class WebhookCreateAPIView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         request_data = request.body
-        if "zen" in request_data.keys() or not request_data['ref'].endswith('master'):
-            return Response(status=status.HTTP_200_OK)
-        commits = [commit for commit in request_data['commits']]
-        repo_name = request_data["repository"]['name']
-        username = request_data['repository']['owner']['name']
-        res.apply_acync(username, repo_name, commits)
+        if "zen" not in request_data.keys() or request_data['ref'].endswith('master'):
+            commits = [commit for commit in request_data['commits']]
+            repo_name = request_data["repository"]['name']
+            username = request_data['repository']['owner']['name']
+            res.apply_async(username, repo_name, commits)
         return Response(status=status.HTTP_200_OK)
