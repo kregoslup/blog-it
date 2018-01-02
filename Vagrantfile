@@ -8,11 +8,10 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.synced_folder "", "/blog-it"
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbook.yml"
+    ansible.verbose = "v"
+    ansible.playbook = "ansible/playbook.yml"
   end
   config.vm.provider "virtualbox" do |vb|
-    vb.gui = true
-
-    vb.memory = "1024"
+    vb.memory = "2048"
   end
 end
