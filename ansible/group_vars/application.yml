@@ -3,14 +3,15 @@
 # ------- #
 
 
+ansible_python_interpreter: "/usr/bin/python3"
 project_name: "blog_it"
-user: "{{ django }}"
+user: "vagrant"
 application_dir: "/blog-it"
 backend_path: "{{ application_dir }}/project"
 temp_dir: "/tmp"
 virtualenv_dir: "/home/{{ user }}/.virtualenvs/{{ project_name }}"
 python_requirements: "{{ application_dir }}/requirements.txt"
-python_version: "python3.4"
+python_versions: [3.6]
 
 # ---------- #
 # POSTGRESQL #

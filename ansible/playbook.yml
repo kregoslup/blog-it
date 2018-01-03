@@ -4,8 +4,7 @@
   become: yes
   vars_files:
     - "./group_vars/application.yml"
-
-- roles:
+  roles:
   - { role: Stouts.python }
   - { role: ANXS.postgresql }
   - { role: common }
