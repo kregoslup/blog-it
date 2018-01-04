@@ -10,8 +10,6 @@ application_dir: "/blog-it"
 backend_path: "{{ application_dir }}/project"
 temp_dir: "/tmp"
 virtualenv_dir: "/home/{{ user }}/.virtualenvs/{{ project_name }}"
-python_requirements: "{{ application_dir }}/requirements.txt"
-python_versions: [3.6]
 
 # ---------- #
 # POSTGRESQL #

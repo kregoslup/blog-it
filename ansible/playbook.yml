@@ -5,6 +5,5 @@
   vars_files:
     - "./group_vars/application.yml"
   roles:
-  - { role: Stouts.python }
-  - { role: ANXS.postgresql }
   - { role: common }
+  - { role: ANXS.postgresql }
